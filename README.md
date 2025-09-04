@@ -5,22 +5,6 @@ This project demonstrates how to lock tokens on Ethereum, mint a wrapped token o
 
 ---
 
-## 📂 Project Structure
-Bridge/
-├── src/
-│ ├── EthBridge.sol # Bridge contract on Ethereum
-│ ├── PolygonBridge.sol # Bridge contract on Polygon
-│ └── bCoin.sol # Wrapped token contract (ERC20)
-├── abis/ # Compiled ABIs for JS relayer
-├── relayer.js # Node.js relayer script
-├── foundry.toml # Foundry config
-└── README.md
-
-markdown
-Copy code
-
----
-
 ## ⚡ Flow
 
 ### Deposit (Ethereum → Polygon)
@@ -40,10 +24,8 @@ Copy code
 ## 🚀 Deployment
 
 ### 1. Start a local chain
-```bash
-anvil
-2. Deploy contracts with Foundry
 
+anvil
 
 forge create src/EthBridge.sol:EthBridge \
   --private-key <PRIVATE_KEY> \
@@ -56,62 +38,38 @@ forge create src/PolygonBridge.sol:PolygonBridge \
 forge create src/bCoin.sol:bCoin \
   --private-key <PRIVATE_KEY> \
   --rpc-url http://127.0.0.1:8545 --broadcast
-Copy deployed addresses into relayer.js.
 
-🔄 Relayer
-The relayer listens for bridge events and forwards them cross-chain.
-
-Run relayer
-
-Copy code
 node relayer.js
-When a user locks tokens on Ethereum, the relayer mints bCoin on Polygon.
-When a user burns bCoin on Polygon, the relayer unlocks tokens on Ethereum.
 
-🧪 Testing with cast
 Mint tokens for a user
 
-Copy code
 cast send <TOKEN_ADDR> "mint(address,uint256)" \
   <USER_ADDR> 100000000000000000000 \
   --private-key <PRIVATE_KEY> \
   --rpc-url http://127.0.0.1:8545
-Approve bridge
 
-Copy code
+Approve Bridge
+
 cast send <TOKEN_ADDR> "approve(address,uint256)" \
   <ETH_BRIDGE_ADDR> 100000000000000000000 \
   --private-key <PRIVATE_KEY> \
   --rpc-url http://127.0.0.1:8545
+
 Lock tokens
 
-Copy code
-cast send <ETH_BRIDGE_ADDR> "lock(address,uint256)" \
-  <TOKEN_ADDR> 100000000000000000000 \
+cast send <TOKEN_ADDR> "approve(address,uint256)" \
+  <ETH_BRIDGE_ADDR> 100000000000000000000 \
   --private-key <PRIVATE_KEY> \
   --rpc-url http://127.0.0.1:8545
-Relayer will detect this and mint bCoin on Polygon.
 
-📌 Requirements
-Foundry
-
-Node.js v18+
-
-ethers.js
-
-dotenv
-
-Install dependencies:
-
+Install dependencies
 npm install
+
+
+
+---
+
 ⚠️ Disclaimer
+
 This project is for educational purposes only.
 It is not audited and should not be used in production for real asset transfers.
-
-
-
-
-
-
-
-
