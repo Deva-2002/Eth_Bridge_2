@@ -21,9 +21,10 @@ This project demonstrates how to lock tokens on Ethereum, mint a wrapped token o
 
 ---
 
-## 🚀 Deployment
+Steps
+----------------------------------------------------------------------
 
-### 1. Start a local chain
+1. Start a local chain
 
 anvil
 
